@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#07111f">
+
+    <meta name="description"
+        content="FinnAI - Simulador inteligente de financiamentos SAC e PRICE">
+
+    <title>FinnAI: Simulação de Financiamentos</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="Style.css">
+</head>
+
+<body>
+
+    <!-- =========================================================
+         BACKGROUND
+    ========================================================== -->
+
+    <div class="background">
+        <div class="grid"></div>
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+        <div class="glow glow-3"></div>
+        <canvas id="particlesCanvas"></canvas>
+    </div>
+
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+
+            <div>
+                <h1>Finn<span>AI</span></h1>
+                <p>Simulação de Financiamentos</p>
+            </div>
+
+        </div>
+
+        <div class="header-actions">
+
+            <div class="selic-mini">
+
+                <div class="status-dot"></div>
+
+                <div>
+                    <small>Taxa SELIC</small>
+                    <strong id="headerSelic">--</strong>
+                </div>
+
+            </div>
+
+            <button
+                class="icon-button"
+                id="themeToggle"
+                title="Alternar tema">
+
+                <i class="fa-solid fa-moon"></i>
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         MAIN
+    ========================================================== -->
+
+    <main class="container">
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <div class="badge">
+                    <span></span>
+                    SIMULADOR INTELIGENTE
+                </div>
+
+                <h2>
+                    Planeje seu financiamento
+                    <strong>com inteligência.</strong>
+                </h2>
+
+                <p>
+                    Compare SAC e PRICE, descubra uma parcela adequada
+                    à sua renda e visualize como sua dívida evolui
+                    ao longo do tempo.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <button
+                        class="primary-button"
+                        id="scrollSimulator">
+
+                        <i class="fa-solid fa-calculator"></i>
+                        Começar simulação
+
+                    </button>
+
+                    <button
+                        class="secondary-button"
+                        id="randomSimulation">
+
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        Simulação inteligente
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="hero-visual">
+
+                <div class="orb">
+
+                    <div class="orb-inner">
+
+                        <i class="fa-solid fa-brain"></i>
+
+                        <span>FinnAI</span>
+
+                        <small>AI FINANCE</small>
+
+                    </div>
+
+                </div>
+
+                <div class="floating-card card-a">
+                    <i class="fa-solid fa-arrow-trend-up"></i>
+                    <span>Planejamento</span>
+                    <strong>Inteligente</strong>
+                </div>
+
+                <div class="floating-card card-b">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Limite recomendado</span>
+                    <strong>30% da renda</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SIMULATOR
+        ====================================================== -->
+
+        <section class="simulator-section" id="simulator">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="section-label">
+                        <i class="fa-solid fa-sliders"></i>
+                        CONFIGURAÇÃO
+                    </span>
+
+                    <h2>Monte sua simulação</h2>
+
+                    <p>
+                        Informe seus dados para que o FinnAI calcule
+                        a melhor estrutura de financiamento.
+                    </p>
+                </div>
+
+                <div class="live-indicator">
+                    <span></span>
+                    Cálculo em tempo real
+                </div>
+
+            </div>
+
+
+            <div class="simulator-grid">
+
+                <!-- INPUT PANEL -->
+
+                <div class="glass-card input-panel">
+
+                    <div class="panel-title">
+
+                        <div class="panel-icon blue">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+
+                        <div>
+                            <h3>Dados financeiros</h3>
+                            <p>Informe sua capacidade financeira.</p>
+                        </div>
+
+                    </div>
+
+
+                    <!-- RENDA -->
+
+                    <div class="form-group">
+
+                        <label for="income">
+                            <span>
+                                <i class="fa-solid fa-money-bill-wave"></i>
+                                Sua renda mensal
+                            </span>
+
+                            <strong id="incomePreview">
+                                R$ 8.000,00
+                            </strong>
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span>R$</span>
+
+                            <input
+                                type="number"
+                                id="income"
+                                value="8000"
+                                min="500"
+                                step="100">
+
+                        </div>
+
+                        <input
+                            type="range"
+                            id="incomeRange"
+                            min="500"
+                            max="100000"
+                            step="100"
+                            value="8000">
+
+                    </div>
+
+
+                    <!-- VALOR -->
+
+                    <div class="form-group">
+
+                        <label for="amount">
+
+                            <span>
+                                <i class="fa-solid fa-house"></i>
+                                Valor do financiamento
+                            </span>
+
+                            <strong id="amountPreview">
+                                R$ 300.000,00
+                            </strong>
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span>R$</span>
+
+                            <input
+                                type="number"
+                                id="amount"
+                                value="300000"
+                                min="1000"
+                                step="1000">
+
+                        </div>
+
+                        <input
+                            type="range"
+                            id="amountRange"
+                            min="10000"
+                            max="2000000"
+                            step="5000"
+                            value="300000">
+
+                    </div>
+
+
+                    <!-- ENTRADA -->
+
+                    <div class="form-group">
+
+                        <label for="downPayment">
+
+                            <span>
+                                <i class="fa-solid fa-coins"></i>
+                                Valor de entrada
+                            </span>
+
+                            <strong id="downPaymentPreview">
+                                R$ 60.000,00
+                            </strong>
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span>R$</span>
+
+                            <input
+                                type="number"
+                                id="downPayment"
+                                value="60000"
+                                min="0"
+                                step="1000">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- JUROS -->
+
+                    <div class="form-group">
+
+                        <label for="annualRate">
+
+                            <span>
+                                <i class="fa-solid fa-percent"></i>
+                                Taxa de juros ao ano
+                            </span>
+
+                            <strong id="ratePreview">
+                                10,50%
+                            </strong>
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span>%</span>
+
+                            <input
+                                type="number"
+                                id="annualRate"
+                                value="10.5"
+                                min="0"
+                                max="100"
+                                step="0.01">
+
+                            <small>a.a.</small>
+
+                        </div>
+
+                        <input
+                            type="range"
+                            id="rateRange"
+                            min="0"
+                            max="30"
+                            step="0.05"
+                            value="10.5">
+
+                    </div>
+
+
+                    <!-- PRAZO -->
+
+                    <div class="form-group">
+
+                        <label for="months">
+
+                            <span>
+                                <i class="fa-regular fa-calendar"></i>
+                                Prazo desejado
+                            </span>
+
+                            <strong id="monthsPreview">
+                                360 meses
+                            </strong>
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span>
+                                <i class="fa-regular fa-clock"></i>
+                            </span>
+
+                            <input
+                                type="number"
+                                id="months"
+                                value="360"
+                                min="12"
+                                max="480"
+                                step="12">
+
+                            <small>meses</small>
+
+                        </div>
+
+                        <input
+                            type="range"
+                            id="monthsRange"
+                            min="12"
+                            max="480"
+                            step="12"
+                            value="360">
+
+                    </div>
+
+
+                    <!-- LIMITE -->
+
+                    <div class="limit-box">
+
+                        <div class="limit-icon">
+                            <i class="fa-solid fa-shield"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Limite recomendado
+                            </strong>
+
+                            <p>
+                                O financiamento não deve comprometer
+                                mais de <b>30%</b> da sua renda.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="calculate-button"
+                        id="calculateButton">
+
+                        <i class="fa-solid fa-bolt"></i>
+
+                        Calcular financiamento
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </div>
+
+
+                <!-- QUICK RESULT -->
+
+                <div class="glass-card quick-result">
+
+                    <div class="panel-title">
+
+                        <div class="panel-icon purple">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+
+                        <div>
+                            <h3>FinnAI recomenda</h3>
+                            <p>Análise automática da sua renda.</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="recommendation">
+
+                        <div class="recommendation-circle">
+
+                            <span id="recommendationPercent">
+                                30%
+                            </span>
+
+                            <small>limite</small>
+
+                        </div>
+
+                        <div>
+
+                            <span class="muted">
+                                Parcela máxima recomendada
+                            </span>
+
+                            <strong id="recommendedInstallment">
+                                R$ 2.400,00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-card safe" id="financialStatus">
+
+                        <div class="status-symbol">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+
+                        <div>
+
+                            <strong id="statusTitle">
+                                Perfil confortável
+                            </strong>
+
+                            <p id="statusDescription">
+                                Sua capacidade de pagamento está dentro
+                                do limite recomendado.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="mini-stats">
+
+                        <div>
+                            <span>Valor financiado</span>
+                            <strong id="quickAmount">
+                                R$ 240.000
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Prazo sugerido</span>
+                            <strong id="quickMonths">
+                                360 meses
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Taxa mensal</span>
+                            <strong id="quickRate">
+                                0,84%
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             RESULTS
+        ====================================================== -->
+
+        <section class="results-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        RESULTADO
+                    </span>
+
+                    <h2>SAC x PRICE</h2>
+
+                    <p>
+                        Compare os dois principais sistemas de amortização.
+                    </p>
+
+                </div>
+
+                <div class="result-actions">
+
+                    <button
+                        class="small-button"
+                        id="exportButton">
+
+                        <i class="fa-solid fa-download"></i>
+                        Exportar
+
+                    </button>
+
+                    <button
+                        class="small-button"
+                        id="resetButton">
+
+                        <i class="fa-solid fa-rotate-left"></i>
+                        Restaurar
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- COMPARISON CARDS -->
+
+            <div class="comparison-grid">
+
+                <!-- SAC -->
+
+                <article class="method-card sac">
+
+                    <div class="method-header">
+
+                        <div class="method-name">
+
+                            <div class="method-logo">
+                                S
+                            </div>
+
+                            <div>
+                                <span>Sistema</span>
+                                <h3>SAC</h3>
+                            </div>
+
+                        </div>
+
+                        <span class="recommended-tag">
+                            <i class="fa-solid fa-star"></i>
+                            Menor juros
+                        </span>
+
+                    </div>
+
+
+                    <div class="main-value">
+
+                        <span>Primeira parcela</span>
+
+                        <strong id="sacFirst">
+                            R$ 2.600,00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="method-details">
+
+                        <div>
+                            <span>Última parcela</span>
+                            <strong id="sacLast">
+                                R$ 670,00
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Total de juros</span>
+                            <strong id="sacInterest">
+                                R$ 410.000
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Total pago</span>
+                            <strong id="sacTotal">
+                                R$ 650.000
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Amortização</span>
+                            <strong id="sacAmortization">
+                                R$ 666,67
+                            </strong>
+                        </div>
+
+                    </div>
+
+                    <div class="progress-info">
+
+                        <div>
+                            <span>Comprometimento inicial</span>
+                            <strong id="sacCommitment">
+                                32,5%
+                            </strong>
+                        </div>
+
+                        <div class="progress">
+                            <span id="sacProgress"></span>
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- PRICE -->
+
+                <article class="method-card price">
+
+                    <div class="method-header">
+
+                        <div class="method-name">
+
+                            <div class="method-logo">
+                                P
+                            </div>
+
+                            <div>
+                                <span>Sistema</span>
+                                <h3>PRICE</h3>
+                            </div>
+
+                        </div>
+
+                        <span class="stable-tag">
+                            <i class="fa-solid fa-equals"></i>
+                            Parcela fixa
+                        </span>
+
+                    </div>
+
+
+                    <div class="main-value">
+
+                        <span>Parcela mensal</span>
+
+                        <strong id="priceInstallment">
+                            R$ 2.210,00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="method-details">
+
+                        <div>
+                            <span>Primeira parcela</span>
+                            <strong id="priceFirst">
+                                R$ 2.210,00
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Total de juros</span>
+                            <strong id="priceInterest">
+                                R$ 555.000
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Total pago</span>
+                            <strong id="priceTotal">
+                                R$ 795.000
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Juros inicial</span>
+                            <strong id="priceInitialInterest">
+                                R$ 2.016
+                            </strong>
+                        </div>
+
+                    </div>
+
+                    <div class="progress-info">
+
+                        <div>
+                            <span>Comprometimento da renda</span>
+                            <strong id="priceCommitment">
+                                27,6%
+                            </strong>
+                        </div>
+
+                        <div class="progress">
+                            <span id="priceProgress"></span>
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+
+            <!-- SAVING HIGHLIGHT -->
+
+            <div class="saving-banner">
+
+                <div class="saving-icon">
+                    <i class="fa-solid fa-piggy-bank"></i>
+                </div>
+
+                <div>
+
+                    <span>
+                        DIFERENÇA ESTIMADA
+                    </span>
+
+                    <strong id="interestSaving">
+                        R$ 145.000,00
+                    </strong>
+
+                    <p>
+                        Economia potencial de juros escolhendo o sistema
+                        com menor custo total.
+                    </p>
+
+                </div>
+
+                <div class="saving-arrow">
+                    <i class="fa-solid fa-arrow-trend-down"></i>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CHARTS
+        ====================================================== -->
+
+        <section class="charts-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        <i class="fa-solid fa-chart-line"></i>
+                        VISUALIZAÇÃO
+                    </span>
+
+                    <h2>Veja o financiamento evoluir</h2>
+
+                    <p>
+                        Os gráficos mostram como o saldo, as parcelas,
+                        juros e amortizações se comportam.
+                    </p>
+
+                </div>
+
+                <div class="chart-controls">
+
+                    <button
+                        class="chart-tab active"
+                        data-chart="balance">
+
+                        Saldo
+
+                    </button>
+
+                    <button
+                        class="chart-tab"
+                        data-chart="payment">
+
+                        Parcelas
+
+                    </button>
+
+                    <button
+                        class="chart-tab"
+                        data-chart="composition">
+
+                        Composição
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="chart-main-card">
+
+                <div class="chart-header">
+
+                    <div>
+
+                        <span id="chartTitle">
+                            Evolução do saldo devedor
+                        </span>
+
+                        <h3 id="chartSubtitle">
+                            SAC x PRICE ao longo do tempo
+                        </h3>
+
+                    </div>
+
+                    <div class="chart-legend">
+
+                        <span>
+                            <i class="legend-sac"></i>
+                            SAC
+                        </span>
+
+                        <span>
+                            <i class="legend-price"></i>
+                            PRICE
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="mainChart"></canvas>
+                </div>
+
+            </div>
+
+
+            <!-- SECONDARY CHARTS -->
+
+            <div class="secondary-charts">
+
+                <div class="chart-card">
+
+                    <div class="chart-card-header">
+
+                        <div>
+
+                            <span>Composição</span>
+
+                            <h3>Juros x Amortização</h3>
+
+                        </div>
+
+                        <i class="fa-solid fa-chart-pie"></i>
+
+                    </div>
+
+                    <div class="small-chart-container">
+                        <canvas id="compositionChart"></canvas>
+                    </div>
+
+                </div>
+
+
+                <div class="chart-card">
+
+                    <div class="chart-card-header">
+
+                        <div>
+
+                            <span>Fluxo financeiro</span>
+
+                            <h3>Total pago</h3>
+
+                        </div>
+
+                        <i class="fa-solid fa-money-bill-trend-up"></i>
+
+                    </div>
+
+                    <div class="small-chart-container">
+                        <canvas id="totalChart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             AI INSIGHTS
+        ====================================================== -->
+
+        <section class="ai-section">
+
+            <div class="ai-header">
+
+                <div class="ai-logo">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+
+                <div>
+
+                    <span>FINNAI ANALYTICS</span>
+
+                    <h2>Insights inteligentes</h2>
+
+                    <p>
+                        Uma leitura simplificada dos números da sua simulação.
+                    </p>
+
+                </div>
+
+                <div class="ai-pulse">
+                    <span></span>
+                    IA ATIVA
+                </div>
+
+            </div>
+
+
+            <div class="insights-grid" id="insightsGrid">
+
+                <div class="insight-card">
+
+                    <i class="fa-solid fa-lightbulb"></i>
+
+                    <div>
+                        <strong>Carregando análise...</strong>
+                        <p>
+                            O FinnAI está analisando seus dados.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             FINANCIAL HEALTH
+        ====================================================== -->
+
+        <section class="health-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                        SAÚDE FINANCEIRA
+                    </span>
+
+                    <h2>Seu nível de comprometimento</h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="health-card">
+
+                <div class="health-score">
+
+                    <div class="score-ring" id="scoreRing">
+
+                        <div>
+                            <strong id="healthScore">
+                                82
+                            </strong>
+
+                            <span>/100</span>
+                        </div>
+
+                    </div>
+
+                    <span id="healthLabel">
+                        Boa capacidade
+                    </span>
+
+                </div>
+
+
+                <div class="health-content">
+
+                    <div class="health-bar">
+
+                        <div class="health-scale">
+                            <span>0%</span>
+                            <span>15%</span>
+                            <span>30%</span>
+                            <span>45%</span>
+                            <span>60%+</span>
+                        </div>
+
+                        <div class="health-track">
+
+                            <div
+                                class="health-fill"
+                                id="healthFill">
+                            </div>
+
+                            <div class="limit-marker"></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="health-stats">
+
+                        <div>
+                            <span>Renda mensal</span>
+                            <strong id="healthIncome">
+                                R$ 8.000
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Limite recomendado</span>
+                            <strong id="healthLimit">
+                                R$ 2.400
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Parcela analisada</span>
+                            <strong id="healthPayment">
+                                R$ 2.200
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             AMORTIZATION TABLE
+        ====================================================== -->
+
+        <section class="table-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        <i class="fa-solid fa-table"></i>
+                        AMORTIZAÇÃO
+                    </span>
+
+                    <h2>Detalhamento das parcelas</h2>
+
+                    <p>
+                        Consulte a evolução mês a mês.
+                    </p>
+
+                </div>
+
+                <div class="table-tools">
+
+                    <select id="tableMethod">
+
+                        <option value="sac">SAC</option>
+                        <option value="price">PRICE</option>
+
+                    </select>
+
+                    <input
+                        type="text"
+                        id="tableSearch"
+                        placeholder="Pesquisar mês...">
+
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Mês</th>
+                            <th>Parcela</th>
+                            <th>Juros</th>
+                            <th>Amortização</th>
+                            <th>Saldo devedor</th>
+                            <th>Juros acumulados</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="amortizationBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="table-footer">
+
+                <button
+                    class="secondary-button"
+                    id="loadMore">
+
+                    <i class="fa-solid fa-plus"></i>
+                    Mostrar mais parcelas
+
+                </button>
+
+                <span id="tableCounter">
+                    0 parcelas
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TAXA SELIC
+        ====================================================== -->
+
+        <section class="selic-section">
+
+            <div class="selic-card">
+
+                <div class="selic-content">
+
+                    <div class="selic-icon">
+                        <i class="fa-solid fa-landmark"></i>
+                    </div>
+
+                    <div>
+
+                        <span>INDICADOR ECONÔMICO</span>
+
+                        <h2>Taxa SELIC</h2>
+
+                        <p>
+                            A Taxa SELIC é a principal referência de juros
+                            da economia brasileira. Ela pode ajudar a
+                            contextualizar o cenário de crédito.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="selic-value">
+
+                    <span>Atual</span>
+
+                    <strong id="selicValue">
+                        Consultando...
+                    </strong>
+
+                    <small id="selicDate">
+                        Atualização automática
+                    </small>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             FOOTER
+        ====================================================== -->
+
+        <footer>
+
+            <div class="footer-brand">
+
+                <strong>
+                    Finn<span>AI</span>
+                </strong>
+
+                <p>
+                    Simulação financeira inteligente.
+                </p>
+
+            </div>
+
+            <div class="footer-info">
+
+                <span>
+                    Este simulador é educativo e não constitui
+                    recomendação financeira.
+                </span>
+
+                <span>
+                    © 2026 FinnAI
+                </span>
+
+            </div>
+
+        </footer>
+
+    </main>
+
+
+    <!-- Toast -->
+
+    <div class="toast" id="toast">
+
+        <i class="fa-solid fa-check-circle"></i>
+
+        <span id="toastMessage">
+            Simulação atualizada.
+        </span>
+
+    </div>
+
+
+    <!-- JavaScript -->
+
+    <script src="Script.js"></script>
+
+</body>
+
+</html>
